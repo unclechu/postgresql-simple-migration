@@ -164,7 +164,8 @@ executeMigration con verbosity name contents = do
         ScriptNotExecuted -> do
             void $ liftIO $ execute_ con (Query contents)
             void $ liftIO $ execute con q (name, checksum)
-            migrationLogWrite verbosity $ Left ("Execute:\t" <> fromString name)
+            migrationLogWrite verbosity $ Right $
+                "Execute:\t" <> fromString name
             return MigrationSuccess
         ScriptModified { actual, expected } -> do
             migrationLogWrite verbosity $ Left
